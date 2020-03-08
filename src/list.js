@@ -3,8 +3,8 @@ import React, { Component, useState } from "react";
 function ButtonL(props) {
   const handleClick = () => {
 
-    console.log( linkName.current.value )
-    props.onClickFunction("test", "test2");
+    const name =  linkName.current.value
+    props.onClickFunction( name, "test2");
   };
 
   let linkName = React.createRef();
@@ -19,15 +19,18 @@ function ButtonL(props) {
 
 function List(props) {
   const [items, setItems] = useState(props.items);
+  const [value, setValue] = useState('x');
 
   // handles
   const addItemHandke = (name, link) => {
     items.push({ name, link });
     setItems(items);
+    setValue(name); // this.forceUpdate()
   };
 
   return (
     <div class="list-group">
+      <b>{value}</b>
       {items.map((item, index) => (
         <a
           key={index}
