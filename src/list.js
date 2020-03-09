@@ -68,7 +68,14 @@ const AddForm = ({ onClickFunction, name }) => {
   );
 };
 
-const ListEl = ({ name, link, id }) => {
+const ListEl = ({ name, link, id, removeClickFunction }) => {
+
+  
+  const handleDeleteClick = ( id ) => {
+    removeClickFunction( id )
+  }
+
+
   return (
     <div key={id} className="list-group-item  ">
       <div className="row">
@@ -79,7 +86,7 @@ const ListEl = ({ name, link, id }) => {
           <small className="text-muted">{link}</small>
         </div>
         <div className="col-1">
-          <button className="btn btn-danger pull-right">
+          <button onClick={handleDeleteClick} className="btn btn-danger pull-right">
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
@@ -87,7 +94,7 @@ const ListEl = ({ name, link, id }) => {
     </div>
   );
 };
-
+ 
 function List(props) {
   const [items, setItems] = useState(props.items);
 
@@ -95,11 +102,22 @@ function List(props) {
   const addItemHandle = (name, link) => {
     setItems([...items, { name, link }]); // push to the end
   };
+ 
+  // handles
+  const removeItemHandle = id => {
+    
+    setItems( items.splice(0, 1) ); // push to the end
+  }; 
 
   return (
     <div className="list-group">
       {items.map((item, index) => (
-        <ListEl id={index} name={item.name} link={item.link} />
+        <ListEl
+          id={index}
+          name={item.name}
+          link={item.link}
+          removeClickFunction={removeItemHandle}
+        />
       ))}
 
       <AddForm onClickFunction={addItemHandle} name={"Add"} />
