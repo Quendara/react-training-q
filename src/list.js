@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 
 const AddForm = ({ onClickFunction, name }) => {
   // props replaced by
@@ -13,7 +13,7 @@ const AddForm = ({ onClickFunction, name }) => {
   const handleClick = event => {
     event.preventDefault();
 
-    if (linkName.length > 0 && linkUrl.length > 0) {
+    if (linkName.length > 0 ) {// && linkUrl.length > 0) {
       // send ONLY when it's filled out
       onClickFunction(linkName, linkUrl);
 
@@ -71,24 +71,23 @@ const AddForm = ({ onClickFunction, name }) => {
 const ListEl = ({ name, link, id, removeClickFunction }) => {
 
   
-  const handleDeleteClick = ( id ) => {
-    removeClickFunction( id )
+  const handleDeleteClick = () => {
+    removeClickFunction( id )  
   }
-
 
   return (
     <div key={id} className="list-group-item  ">
       <div className="row">
         <div className="col-10">
           <a href={link} target="_blank">
-            <h5>{name}</h5>{" "}
+            <h5>{name}</h5>
           </a>
           <small className="text-muted">{link}</small>
         </div>
         <div className="col-1">
-          <button onClick={handleDeleteClick} className="btn btn-danger pull-right">
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
+          <a onClick={handleDeleteClick} className="text-danger" pull-right>
+            <FontAwesomeIcon icon={faMinusCircle} />
+          </a>
         </div>
       </div>
     </div>
@@ -100,23 +99,27 @@ function List(props) {
 
   // handles
   const addItemHandle = (name, link) => {
-    setItems([...items, { name, link }]); // push to the end
+
+    const id = new Date().getTime() 
+    setItems([...items, { name, link, id }]); // push to the end
   };
  
   // handles
   const removeItemHandle = id => {
     
-    setItems( items.splice(0, 1) ); // push to the end
+    console.log( )
+    const items2 = items.filter(item => item.id !== id );
+    setItems( items2 ); // push to the end
   }; 
 
   return (
     <div className="list-group">
       {items.map((item, index) => (
         <ListEl
-          id={index}
+          id={item.id}
           name={item.name}
           link={item.link}
-          removeClickFunction={removeItemHandle}
+          removeClickFunction={ removeItemHandle }
         />
       ))}
 
