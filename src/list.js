@@ -1,36 +1,87 @@
 import React, { Component, useState } from "react";
 
-function ButtonL(props) {
-  const handleClick = () => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-    const name =  linkName.current.value
-    props.onClickFunction( name, "test2");
+const ToDoAddForm = ({onClickFunction, name }) => {
+
+  // props replaced by 
+  
+  
+
+  const [linkName, setLinkName] = useState("");
+  const [linkUrl, setLinkUrl] = useState("");
+  const [trySend, setTrySend] = useState(false);
+
+  const handleClick = event => {
+    event.preventDefault();
+
+    if (linkName.length > 0 && linkUrl.length > 0) {
+      // send ONLY when it's filled out
+      onClickFunction(linkName, linkUrl);
+
+      setLinkName("");
+      setLinkUrl("");
+      setTrySend(false); 
+    } else {
+      // indicate that user has tried to send, now how potenial issues on UI
+      setTrySend(true);
+    }
   };
 
-  let linkName = React.createRef();
+  const getInputClass = val => {
+    let ret = "form-control";
+    if (val.length > 0) {
+      ret += " is-valid";
+    } else if (trySend) {
+      // show issues when length is 0 and the user has tried to send
+      ret += " is-invalid";
+    }
+    return ret;
+  };
 
   return (
     <a className="list-group-item  ">
-      <input ref={linkName} />
-      <button onClick={handleClick}>{props.name}</button>
+      <form onSubmit={handleClick}>
+        <div className="form-row">
+          <div className="col-6 col-sm-5 mb-3">
+          <input
+            value={linkName}
+            className={getInputClass(linkName)}
+            placeholder="Name"
+            onChange={e => setLinkName(e.target.value)}
+          />
+          </div>
+          <div className="col-6 col-sm-5 mb-3">
+          <input
+            value={linkUrl}
+            className={getInputClass(linkUrl)}
+            placeholder="URL"
+            onChange={e => setLinkUrl(e.target.value)}
+          />
+          </div>
+          <div className="col-12 col-sm-2 ">
+          <button className="btn btn-primary">
+          <FontAwesomeIcon icon={faPlus} />
+          </button>
+          
+          </div> 
+        </div> 
+      </form>
     </a>
   );
-}
+};
 
 function List(props) {
   const [items, setItems] = useState(props.items);
-  const [value, setValue] = useState('x');
 
   // handles
-  const addItemHandke = (name, link) => {
-    items.push({ name, link });
-    setItems(items);
-    setValue(name); // this.forceUpdate()
+  const addItemHandle = (name, link) => {
+    setItems([...items, { name, link }]); // push to the end
   };
 
   return (
-    <div class="list-group">
-      <b>{value}</b>
+    <div className="list-group">
       {items.map((item, index) => (
         <a
           key={index}
@@ -42,7 +93,7 @@ function List(props) {
           <small className="text-muted">{item.link}</small>
         </a>
       ))}
-      <ButtonL onClickFunction={addItemHandke} name={"Add"} />
+      <ToDoAddForm onClickFunction={addItemHandle} name={"Add"} />
     </div>
   );
 }

@@ -23,9 +23,10 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <Counter />
         <h3>Links</h3>
         <List items={items} />
+        <hr /> 
+        <Counter />
       </div>
     );
   }
