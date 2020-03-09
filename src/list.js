@@ -1,13 +1,10 @@
 import React, { Component, useState } from "react";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const ToDoAddForm = ({onClickFunction, name }) => {
-
-  // props replaced by 
-  
-  
+const AddForm = ({ onClickFunction, name }) => {
+  // props replaced by
 
   const [linkName, setLinkName] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
@@ -22,7 +19,7 @@ const ToDoAddForm = ({onClickFunction, name }) => {
 
       setLinkName("");
       setLinkUrl("");
-      setTrySend(false); 
+      setTrySend(false);
     } else {
       // indicate that user has tried to send, now how potenial issues on UI
       setTrySend(true);
@@ -45,30 +42,49 @@ const ToDoAddForm = ({onClickFunction, name }) => {
       <form onSubmit={handleClick}>
         <div className="form-row">
           <div className="col-6 col-sm-5 mb-3">
-          <input
-            value={linkName}
-            className={getInputClass(linkName)}
-            placeholder="Name"
-            onChange={e => setLinkName(e.target.value)}
-          />
+            <input
+              value={linkName}
+              className={getInputClass(linkName)}
+              placeholder="Name"
+              onChange={e => setLinkName(e.target.value)}
+            />
           </div>
           <div className="col-6 col-sm-5 mb-3">
-          <input
-            value={linkUrl}
-            className={getInputClass(linkUrl)}
-            placeholder="URL"
-            onChange={e => setLinkUrl(e.target.value)}
-          />
+            <input
+              value={linkUrl}
+              className={getInputClass(linkUrl)}
+              placeholder="URL"
+              onChange={e => setLinkUrl(e.target.value)}
+            />
           </div>
           <div className="col-12 col-sm-2 ">
-          <button className="btn btn-primary">
-          <FontAwesomeIcon icon={faPlus} />
-          </button>
-          
-          </div> 
-        </div> 
+            <button className="btn btn-primary">
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </div>
+        </div>
       </form>
     </a>
+  );
+};
+
+const ListEl = ({ name, link, id }) => {
+  return (
+    <div key={id} className="list-group-item  ">
+      <div className="row">
+        <div className="col-10">
+          <a href={link} target="_blank">
+            <h5>{name}</h5>{" "}
+          </a>
+          <small className="text-muted">{link}</small>
+        </div>
+        <div className="col-1">
+          <button className="btn btn-danger pull-right">
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -83,17 +99,10 @@ function List(props) {
   return (
     <div className="list-group">
       {items.map((item, index) => (
-        <a
-          key={index}
-          href={item.link}
-          target="_blank"
-          className="list-group-item  "
-        >
-          <h5>{item.name}</h5>
-          <small className="text-muted">{item.link}</small>
-        </a>
+        <ListEl id={index} name={item.name} link={item.link} />
       ))}
-      <ToDoAddForm onClickFunction={addItemHandle} name={"Add"} />
+
+      <AddForm onClickFunction={addItemHandle} name={"Add"} />
     </div>
   );
 }
